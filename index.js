@@ -4,7 +4,6 @@ const mysql = require("mysql");
 const logo = require("asciiart-logo");
 
 
-
 function init() {
     // prints a cool ascii art
     const logoText = logo({ name: "Employee Manager" }).render();
