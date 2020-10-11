@@ -5,8 +5,22 @@ const logo = require("asciiart-logo");
 
 function init() {
     // prints a cool ascii art
-    const logoText = logo({ name: "Employee Manager"}).render();
+    const logoText = logo({ name: "Employee Manager" }).render();
     console.log(logoText);
     // starts the user prompts
     startPrompts();
+}
+
+function startPrompts() {
+    inquirer.prompt(
+        {
+            type: "list",
+            name: "choice",
+            message: "How would you like to get started?",
+            choices: [
+
+            ]
+
+        }
+    )
 }

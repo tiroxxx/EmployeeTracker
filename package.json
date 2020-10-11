@@ -1,0 +1,28 @@
+{
+  "name": "employeetracker",
+  "version": "1.0.0",
+  "description": "App to track employees",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiroxxx/EmployeeTracker.git"
+  },
+  "keywords": [
+    "employee",
+    "tracker"
+  ],
+  "author": "Christian Marquez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tiroxxx/EmployeeTracker/issues"
+  },
+  "homepage": "https://github.com/tiroxxx/EmployeeTracker#readme",
+  "dependencies": {
+    "asciiart-logo": "^0.2.6",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
