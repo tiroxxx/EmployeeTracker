@@ -3,6 +3,8 @@ const inquirer = require("inquirer");
 const mysql = require("mysql");
 const logo = require("asciiart-logo");
 
+
+
 function init() {
     // prints a cool ascii art
     const logoText = logo({ name: "Employee Manager" }).render();
@@ -11,6 +13,9 @@ function init() {
     startPrompts();
 }
 
+// start the program
+init();
+
 function startPrompts() {
     inquirer.prompt(
         {
@@ -18,9 +23,8 @@ function startPrompts() {
             name: "choice",
             message: "How would you like to get started?",
             choices: [
-
+                "run", "jog?", "or swim"
             ]
-
         }
     )
 }
