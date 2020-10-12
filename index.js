@@ -107,6 +107,13 @@ function addEmployee() {
             choices: []
         }
     ).then(answers => {
+        connection.query(
+            "INSERT INTO employee SET ?",
+            {
+                first_name: answers.firstName,
+                last_name: lastName
+            }
+        )
 
         startPrompts();
     })
