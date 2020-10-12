@@ -124,14 +124,23 @@ function addDepartment() {
 
     inquirer.prompt(
         {
-            input: "list",
+            type: "input",
             name: "department",
-            message: "What department would you like to add?",
-            choices: []
+            message: "What department would you like to add?"
         }
     ).then(answers => {
-
-        startPrompts();
+        connection.query(
+            "INSERT INTO department SET ?",
+            {
+                name: answers.department
+            },
+            function (err) {
+                if (err) throw err;
+                console.log("Added deparment successfully!");
+                // going back to main menu
+                startPrompts();
+            }
+        )
     })
 }
 function addRole() {
