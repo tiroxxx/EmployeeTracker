@@ -19,11 +19,34 @@ function startPrompts() {
     inquirer.prompt(
         {
             type: "list",
-            name: "choice",
+            name: "decision",
             message: "How would you like to get started?",
             choices: [
-                "run", "jog?", "or swim"
+                "Add Employee", "Add Department", "Add Role", "Update Employee Role", "View Deparments", "View Employees", "View Role"
             ]
-        }
-    )
+        }).then( answer => {
+            switch (answer.decision) {
+                case "Add Employee":
+                    addEmplyee();
+                    break;
+                case "Add Department":
+                    addDepartment();
+                    break;
+                case "Add Role":
+                    addRole();
+                    break;
+                case "Update Employee Role":
+                    updateEmployeeRole();
+                    break;
+                case "View Deparments":
+                    viewDepartments();
+                    break;
+                case "View Employees":
+                    viewEmployees();
+                    break;
+                default:
+                    viewRole();
+                    break;
+            }
+        })
 }
