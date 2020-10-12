@@ -154,6 +154,19 @@ function addRole() {
             choices: []
         }
     ).then(answers => {
+        // adding new role to DB
+        connection.query(
+            "INSERT INTO role SET ?",
+            {
+                title: answers.role
+            },
+            function (err) {
+                if (err) throw err;
+                console.log("Added role successfully!");
+                // going back to main menu
+                startPrompts();
+            }
+        )
 
         startPrompts();
     })
