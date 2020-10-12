@@ -165,7 +165,14 @@ function updateEmployeeRole() {
 }
 function viewDepartments() {
     console.log(("view department"));
-    
+    connection.query(
+        // retrieving departments from DB
+        "SELECT * FROM departments",
+        function (err, res) {
+            if (err) throw err;
+            console.log(res);
+        })
+    startPrompts();
 }
 function viewEmployees() {
     console.log(("view employees"));
