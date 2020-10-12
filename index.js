@@ -167,16 +167,35 @@ function viewDepartments() {
     console.log(("view department"));
     connection.query(
         // retrieving departments from DB
-        "SELECT * FROM departments",
+        "SELECT * FROM department",
         function (err, res) {
             if (err) throw err;
             console.log(res);
         })
+    // go back to main menu
     startPrompts();
 }
 function viewEmployees() {
     console.log(("view employees"));
+    connection.query(
+        // retrieving employees from DB
+        "SELECT * FROM employee",
+        function (err, res) {
+            if (err) throw err;
+            console.log(res);
+        })
+    // go back to main menu
+    startPrompts();
 }
 function viewRoles() {
     console.log(("view Role"));
+    connection.query(
+        // retrieving roles from DB
+        "SELECT * FROM role",
+        function (err, res) {
+            if (err) throw err;
+            console.log(res);
+        })
+    // go back to main menu
+    startPrompts();
 }
