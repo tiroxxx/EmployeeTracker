@@ -58,7 +58,7 @@ function startPrompts() {
                     viewEmployees();
                     break;
                 default:
-                    viewRole();
+                    viewRoles();
                     break;
             }
         })
@@ -106,29 +106,70 @@ function addEmployee() {
             message: "Who is the employee's manager?",
             choices: []
         }
-    ).then({
-        
+    ).then(answers => {
+
         startPrompts();
     })
-
-    connection.query("INSERT INTO auctions SET ?")
 }
 
 function addDepartment() {
     console.log(("add department"));
+
+    inquirer.prompt(
+        {
+            input: "list",
+            name: "department",
+            message: "What department would you like to add?",
+            choices: []
+        }
+    ).then(answers => {
+
+        startPrompts();
+    })
 }
 function addRole() {
     console.log(("add role"));
+
+    inquirer.prompt(
+        {
+            input: "list",
+            name: "role",
+            message: "What role would you like to add?",
+            choices: []
+        }
+    ).then(answers => {
+
+        startPrompts();
+    })
 }
 function updateEmployeeRole() {
     console.log(("update employee role"));
+
+    inquirer.prompt(
+        {
+            input: "list",
+            name: "employee",
+            message: "For which employee would you like to change roles?",
+            choices: []
+        },
+        {
+            input: "list",
+            name: "role",
+            message: "What role would you like to give to this employee?",
+            choices: []
+        }
+    ).then(answers => {
+
+        startPrompts();
+    })
 }
 function viewDepartments() {
     console.log(("view department"));
+    
 }
 function viewEmployees() {
     console.log(("view employees"));
 }
-function viewRole() {
+function viewRoles() {
     console.log(("view Role"));
 }
