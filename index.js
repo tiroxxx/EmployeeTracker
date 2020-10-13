@@ -148,13 +148,19 @@ function addRole() {
             input: "input",
             name: "role",
             message: "What role would you like to add?",
+        },
+        {
+            input: "input",
+            name: "salary",
+            message: "How much does this role make?",
         }
     ).then(answers => {
         // adding new role to DB
         connection.query(
             "INSERT INTO role SET ?",
             {
-                title: answers.role
+                title: answers.role,
+                salary: answers.salary
             },
             function (err) {
                 if (err) throw err;
@@ -163,31 +169,59 @@ function addRole() {
                 startPrompts();
             }
         )
-
-        startPrompts();
     })
 }
 function updateEmployeeRole() {
-    console.log(("update employee role"));
+    console.log("update employee role");
 
-    inquirer.prompt(
-        {
-            input: "list",
-            name: "employee",
-            message: "For which employee would you like to change roles?",
-            choices: []
-        },
-        {
-            input: "list",
-            name: "role",
-            message: "What role would you like to give to this employee?",
-            choices: []
-        }
-    ).then(answers => {
+    let query = "SELECT employee.first_name, employee.last_name, role.title";
+    query += "FROM employee LEFT JOIN role ON employee.role_id = role.id";
 
-        startPrompts();
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+
+        inquirer.prompt([
+            {
+                input: "rawlist",
+                name: "employee",
+                message: "For which employee would you like to change roles?",
+                choices: function () {
+                    var nameArray = [];
+                    for (let i = 0; i < res.length; i++) {
+                        nameArray.push(res[i].first_name);
+                    }
+                    return nameArray;
+                }
+            },
+            {
+                input: "rawlist",
+                name: "role",
+                message: "What role would you like to give to this employee?",
+                choices: function () {
+                    var roleArray = [];
+                    for (let i = 0; i < res.length; i++) {
+                        roleArray.push(res[i].title);
+                    }
+                    return roleArray;
+                }
+            }
+        ]).then(answers => {
+            connection.query(
+                "UPDATE employee SET ? WHERE ?",
+                [
+                    {
+
+                    }
+                ]
+            )
+
+
+
+            startPrompts();
+        })
     })
 }
+
 function viewDepartments() {
     console.log(("view department"));
     connection.query(
