@@ -8,12 +8,12 @@ const connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "Christian41!",
-    database: "employeetracker_db"
+    database: "employees"
 });
 
 connection.connect(function (err) {
     if (err) throw err;
-
+    // start program
     init();
 });
 
@@ -24,9 +24,6 @@ function init() {
     // starts the user prompts
     startPrompts();
 }
-
-// start the program
-init();
 
 function startPrompts() {
     inquirer.prompt(
@@ -148,10 +145,9 @@ function addRole() {
 
     inquirer.prompt(
         {
-            input: "list",
+            input: "input",
             name: "role",
             message: "What role would you like to add?",
-            choices: []
         }
     ).then(answers => {
         // adding new role to DB
@@ -196,7 +192,7 @@ function viewDepartments() {
     console.log(("view department"));
     connection.query(
         // retrieving departments from DB
-        "SELECT * FROM department",
+        "SELECT name FROM department",
         function (err, res) {
             if (err) throw err;
             console.log(res);
@@ -220,7 +216,7 @@ function viewRoles() {
     console.log(("view Role"));
     connection.query(
         // retrieving roles from DB
-        "SELECT * FROM role",
+        "SELECT title FROM role",
         function (err, res) {
             if (err) throw err;
             console.log(res);
