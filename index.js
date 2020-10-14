@@ -11,6 +11,8 @@ const connection = mysql.createConnection({
     database: "employees"
 });
 
+const nameArray = [];
+
 connection.connect(function (err) {
     if (err) throw err;
     // start program
@@ -26,6 +28,7 @@ function init() {
 }
 
 function startPrompts() {
+    getEmployee()
     inquirer.prompt(
         {
             type: "list",
@@ -111,7 +114,6 @@ function addEmployee() {
                 last_name: lastName
             }
         )
-
         startPrompts();
     })
 }
@@ -173,28 +175,22 @@ function addRole() {
 }
 function updateEmployeeRole() {
     console.log("update employee role");
-
-    let query = "SELECT employee.first_name, employee.last_name, role.title";
-    query += "FROM employee LEFT JOIN role ON employee.role_id = role.id";
+    // console.log(nameArray);
+    let query = "SELECT first_name, last_name, title, role.id FROM employee LEFT JOIN role ON role.id = employee.role_id";
 
     connection.query(query, function (err, res) {
         if (err) throw err;
-
+        console.log(nameArray);
         inquirer.prompt([
+
             {
-                input: "rawlist",
+                input: "list",
                 name: "employee",
                 message: "For which employee would you like to change roles?",
-                choices: function () {
-                    var nameArray = [];
-                    for (let i = 0; i < res.length; i++) {
-                        nameArray.push(res[i].first_name);
-                    }
-                    return nameArray;
-                }
+                choices: nameArray
             },
             {
-                input: "rawlist",
+                input: "list",
                 name: "role",
                 message: "What role would you like to give to this employee?",
                 choices: function () {
@@ -210,13 +206,19 @@ function updateEmployeeRole() {
                 "UPDATE employee SET ? WHERE ?",
                 [
                     {
-
+                        role: answers.role
+                    },
+                    {
+                        first_name: answers.employee
                     }
-                ]
+                ],
+                function (err) {
+                    if (err) throw err;
+                    console.log("Added role successfully!");
+                    // going back to main menu
+                    startPrompts();
+                }
             )
-
-
-
             startPrompts();
         })
     })
@@ -257,4 +259,14 @@ function viewRoles() {
         })
     // go back to main menu
     startPrompts();
+}
+
+function getEmployee() {
+    connection.query("SELECT * FROM employee",
+        function (err, res) {
+            if (err) throw err;
+            for (let i = 0; i < res.length; i++) {
+                nameArray.push(res[i].first_name);
+            }
+        })
 }
