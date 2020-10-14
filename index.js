@@ -66,7 +66,7 @@ function startPrompts() {
 
 function addEmployee() {
     console.log("add employee");
-
+    connection.query("SELECT * FROM ")
     inquirer.prompt(
         {
             type: "input",
@@ -145,7 +145,7 @@ function addDepartment() {
 function addRole() {
     console.log(("add role"));
 
-    inquirer.prompt(
+    inquirer.prompt([
         {
             input: "input",
             name: "role",
@@ -155,14 +155,20 @@ function addRole() {
             input: "input",
             name: "salary",
             message: "How much does this role make?",
+        },
+        {
+            input: "input",
+            name: "id",
+            message: "What is the ID for this role?",
         }
-    ).then(answers => {
+    ]).then(answers => {
         // adding new role to DB
         connection.query(
             "INSERT INTO role SET ?",
             {
                 title: answers.role,
-                salary: answers.salary
+                salary: answers.salary,
+                department_id: answers.id
             },
             function (err) {
                 if (err) throw err;
@@ -231,7 +237,7 @@ function viewDepartments() {
         "SELECT name FROM department",
         function (err, res) {
             if (err) throw err;
-            console.log(res);
+            console.table(res);
         })
     // go back to main menu
     startPrompts();
@@ -243,7 +249,7 @@ function viewEmployees() {
         "SELECT * FROM employee",
         function (err, res) {
             if (err) throw err;
-            console.log(res);
+            console.table(res);
         })
     // go back to main menu
     startPrompts();
@@ -255,7 +261,7 @@ function viewRoles() {
         "SELECT title FROM role",
         function (err, res) {
             if (err) throw err;
-            console.log(res);
+            console.table(res);
         })
     // go back to main menu
     startPrompts();
