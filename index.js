@@ -190,13 +190,13 @@ function updateEmployeeRole() {
         inquirer.prompt([
 
             {
-                input: "list",
+                type: "list",
                 name: "employee",
                 message: "For which employee would you like to change roles?",
                 choices: nameArray
             },
             {
-                input: "list",
+                type: "list",
                 name: "role",
                 message: "What role would you like to give to this employee?",
                 choices: function () {
