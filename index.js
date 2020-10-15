@@ -12,6 +12,8 @@ const connection = mysql.createConnection({
 });
 
 const nameArray = [];
+const roleArray = [];
+let roleId;
 
 connection.connect(function (err) {
     if (err) throw err;
@@ -28,7 +30,8 @@ function init() {
 }
 
 function startPrompts() {
-    getEmployee()
+    getEmployee();
+    getRole();
     inquirer.prompt(
         {
             type: "list",
@@ -182,7 +185,7 @@ function addRole() {
 function updateEmployeeRole() {
     console.log("update employee role");
     // console.log(nameArray);
-    let query = "SELECT first_name, last_name, title, role.id FROM employee LEFT JOIN role ON role.id = employee.role_id";
+    let query = "SELECT * FROM employee LEFT JOIN role ON role.id = employee.role_id";
 
     connection.query(query, function (err, res) {
         if (err) throw err;
@@ -199,33 +202,11 @@ function updateEmployeeRole() {
                 type: "list",
                 name: "role",
                 message: "What role would you like to give to this employee?",
-                choices: function () {
-                    var roleArray = [];
-                    for (let i = 0; i < res.length; i++) {
-                        roleArray.push(res[i].title);
-                    }
-                    return roleArray;
-                }
+                choices: roleArray
+
             }
         ]).then(answers => {
-            connection.query(
-                "UPDATE employee SET ? WHERE ?",
-                [
-                    {
-                        role: answers.role
-                    },
-                    {
-                        first_name: answers.employee
-                    }
-                ],
-                function (err) {
-                    if (err) throw err;
-                    console.log("Added role successfully!");
-                    // going back to main menu
-                    startPrompts();
-                }
-            )
-            startPrompts();
+            getRoleId(answers.role, answers.employee);
         })
     })
 }
@@ -275,4 +256,36 @@ function getEmployee() {
                 nameArray.push(res[i].first_name);
             }
         })
+}
+
+function getRole() {
+    connection.query("SELECT * FROM role",
+        function (err, res) {
+            if (err) throw err;
+            for (let i = 0; i < res.length; i++) {
+                roleArray.push(res[i].title);
+            }
+        })
+}
+
+function getRoleId(role, employee) {
+    connection.query("SELECT id FROM role WHERE title = ?", [role],
+        function (err, res) {
+            if (err) throw err;
+            roleId = res[0].id;
+            updateRole(employee);
+        })
+}
+
+function updateRole(employee) {
+    connection.query(
+        "UPDATE employee SET role_id = ? WHERE first_name = ?",
+        [roleId, employee],
+        function (err) {
+            if (err) throw err;
+            console.log("Added role successfully!");
+            // going back to main menu
+            startPrompts();
+        }
+    )
 }
