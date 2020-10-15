@@ -109,22 +109,24 @@ function addEmployee() {
                 choices: nameArr
             }
         ]).then(answers => {
-            getManagerId(answers.manager);
             connection.query(
                 "INSERT INTO employee SET ?",
                 {
                     first_name: answers.firstName,
-                    last_name: answers.lastName
+                    last_name: answers.lastName,
+                    role_id: 1
+                },
+                function (err,res) {
+                    if (err) throw err
+                    console.log("Successfully added Employee!");
+                    startPrompts();
                 }
             )
-            getRoleId(answers.role, answers.firstName)
         });
     });
 }
 
 function addDepartment() {
-    console.log(("add department"));
-
     inquirer.prompt(
         {
             type: "input",
@@ -148,8 +150,6 @@ function addDepartment() {
 }
 
 function addRole() {
-    console.log(("add role"));
-
     inquirer.prompt([
         {
             input: "input",
