@@ -11,8 +11,6 @@ const connection = mysql.createConnection({
     database: "employees"
 });
 
-const nameArray = [];
-const roleArray = [];
 let roleId;
 
 connection.connect(function (err) {
@@ -30,8 +28,6 @@ function init() {
 }
 
 function startPrompts() {
-    getEmployee();
-    getRole();
     inquirer.prompt(
         {
             type: "list",
@@ -69,7 +65,7 @@ function startPrompts() {
 
 function addEmployee() {
     console.log("add employee");
-    connection.query("SELECT * FROM ")
+    connection.query("SELECT * FROM employee LEFT JOIN role ON role.id = employee.role_id")
     inquirer.prompt(
         {
             type: "input",
@@ -183,27 +179,35 @@ function addRole() {
     })
 }
 function updateEmployeeRole() {
-    console.log("update employee role");
-    // console.log(nameArray);
     let query = "SELECT * FROM employee LEFT JOIN role ON role.id = employee.role_id";
 
     connection.query(query, function (err, res) {
         if (err) throw err;
-        console.log(nameArray);
         inquirer.prompt([
 
             {
                 type: "list",
                 name: "employee",
                 message: "For which employee would you like to change roles?",
-                choices: nameArray
+                choices: function () {
+                    const choiceArr = [];
+                    for (let i = 0; i < res.length; i++) {
+                        choiceArr.push(res[i].first_name);
+                    }
+                    return choiceArr;
+                }
             },
             {
                 type: "list",
                 name: "role",
                 message: "What role would you like to give to this employee?",
-                choices: roleArray
-
+                choices: function () {
+                    const choiceArr = [];
+                    for (let i = 0; i < res.length; i++) {
+                        choiceArr.push(res[i].title);
+                    }
+                    return choiceArr;
+                }
             }
         ]).then(answers => {
             getRoleId(answers.role, answers.employee);
@@ -246,26 +250,6 @@ function viewRoles() {
         })
     // go back to main menu
     startPrompts();
-}
-
-function getEmployee() {
-    connection.query("SELECT * FROM employee",
-        function (err, res) {
-            if (err) throw err;
-            for (let i = 0; i < res.length; i++) {
-                nameArray.push(res[i].first_name);
-            }
-        })
-}
-
-function getRole() {
-    connection.query("SELECT * FROM role",
-        function (err, res) {
-            if (err) throw err;
-            for (let i = 0; i < res.length; i++) {
-                roleArray.push(res[i].title);
-            }
-        })
 }
 
 function getRoleId(role, employee) {
